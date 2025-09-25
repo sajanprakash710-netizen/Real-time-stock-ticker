@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Realtime Stock Ticker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #111;
+      color: #fff;
+    }
+    #ticker-container {
+      overflow: hidden;
+      white-space: nowrap;
+      background: #222;
+      padding: 10px 0;
+      box-sizing: border-box;
+      width: 100%;
+    }
+    #ticker {
+      display: inline-block;
+      animation: scroll 20s linear infinite;
+    }
+    .item {
+      display: inline-block;
+      margin-right: 40px;
+      font-size: 18px;
+    }
+    .symbol {
+      font-weight: bold;
+      color: #00ff90;
+    }
+    .price {
+      color: #fff;
+    }
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 style="text-align:center;">Realtime Stock Ticker</h1>
+  <div id="ticker-container">
+    <div id="ticker"></div>
+  </div>
+
+  <script>
+    // Replace with your own API key
+    const FINNHUB_API_KEY = 'YOUR_FINNHUB_API_KEY';
+
+    // Symbols to subscribe to:
+    const symbols = ['AAPL', 'MSFT', 'TSLA', 'GOOGL', 'AMZN'];
+
+    // WebSocket connection
+    const socket = new WebSocket(`wss://ws.finnhub.io?token=${FINNHUB_API_KEY}`);
+
+    // Keep track of latest prices
+    const prices = {};
+
+    socket.addEventListener('open', () => {
+      console.log('Connected to Finnhub WebSocket');
+      symbols.forEach(sym => {
+        socket.send(JSON.stringify({ type: 'subscribe', symbol: sym }));
+      });
+    });
+
+    socket.addEventListener('message', (event) => {
+      const msg = JSON.parse(event.data);
+      if (msg.type === 'trade' && msg.data) {
+        msg.data.forEach(trade => {
+          prices[trade.s] = trade.p;
+        });
+        updateTicker();
+      }
+    });
+
+    socket.addEventListener('close', () => console.log('WebSocket closed'));
+    socket.addEventListener('error', (e) => console.error('WebSocket error', e));
+
+    function updateTicker() {
+      const tickerEl = document.getElementById('ticker');
+      tickerEl.innerHTML = ''; // clear
+      for (const sym of symbols) {
+        const price = prices[sym] || '—';
+        const item = document.createElement('div');
+        item.className = 'item';
+        item.innerHTML = `<span class="symbol">${sym}</span>: <span class="price">${price}</span>`;
+        tickerEl.appendChild(item);
+      }
+    }
+  </script>
+
+</body>
+</html>
