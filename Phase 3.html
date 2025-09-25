@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CSS Stock Ticker</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: #f1f5f9;
+  }
+
+  /* ticker container */
+  .ticker-wrapper {
+    position: relative;
+    overflow: hidden;
+    background: #1e293b;
+    border-top: 2px solid #334155;
+    border-bottom: 2px solid #334155;
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* inner track */
+  .ticker {
+    display: flex;
+    gap: 40px;
+    white-space: nowrap;
+    animation: scroll-left 20s linear infinite;
+  }
+
+  /* ticker items */
+  .item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .symbol {
+    color: #38bdf8; /* blue */
+  }
+  .price {
+    color: #f1f5f9;
+  }
+  .up {
+    color: #22c55e; /* green */
+  }
+  .down {
+    color: #ef4444; /* red */
+  }
+
+  /* scrolling animation */
+  @keyframes scroll-left {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+</style>
+</head>
+<body>
+  <div class="ticker-wrapper">
+    <div class="ticker">
+      <div class="item"><span class="symbol">AAPL</span><span class="price">172.44</span><span class="up">+1.2%</span></div>
+      <div class="item"><span class="symbol">TSLA</span><span class="price">244.10</span><span class="down">-0.8%</span></div>
+      <div class="item"><span class="symbol">GOOGL</span><span class="price">137.12</span><span class="up">+0.5%</span></div>
+      <div class="item"><span class="symbol">MSFT</span><span class="price">319.60</span><span class="up">+0.9%</span></div>
+      <div class="item"><span class="symbol">AMZN</span><span class="price">126.90</span><span class="down">-0.3%</span></div>
+
+      <!-- repeat same items to make animation seamless -->
+      <div class="item"><span class="symbol">AAPL</span><span class="price">172.44</span><span class="up">+1.2%</span></div>
+      <div class="item"><span class="symbol">TSLA</span><span class="price">244.10</span><span class="down">-0.8%</span></div>
+      <div class="item"><span class="symbol">GOOGL</span><span class="price">137.12</span><span class="up">+0.5%</span></div>
+      <div class="item"><span class="symbol">MSFT</span><span class="price">319.60</span><span class="up">+0.9%</span></div>
+      <div class="item"><span class="symbol">AMZN</span><span class="price">126.90</span><span class="down">-0.3%</span></div>
+    </div>
+  </div>
+</body>
+</html>
